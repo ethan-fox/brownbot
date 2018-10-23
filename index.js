@@ -75,8 +75,10 @@ app.post('/', async function (req, res) {
                 await scores.list(function(err, body){
 
                     var users = body.rows;
-
+                    console.log(users)
+                
                     for(var i = 0; i < users.length; ++i){
+                        console.log(users[i])
                         board.push(users[i]);
                     }
 
