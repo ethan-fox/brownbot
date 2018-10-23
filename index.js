@@ -30,7 +30,7 @@ app.get('/poop', function(req, res){
 
 app.get('/hello', function(){
     postToGeneral('💩   💩')
-    res.send('youre welcome')
+    res.send({ 'text': 'youre welcome' })
 })
 
 // TODO: app post something too?
