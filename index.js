@@ -23,7 +23,8 @@ app.post('/', function (req, res) {
             'title': 'spooky'
         }]
     })
-    res.send(req.body)
+    console.log(req)
+    res.send('thanks')
 })
 
 app.post('/brown', function(req, res){
