@@ -42,7 +42,7 @@ async function getDisplayName(raw_name){
 //     'poop_received': '<number>'
 // }
 
-app.post('/', function (req, res) {
+app.post('/', async function (req, res) {
     // TODO: Change channel name to 'general' when push to prod
     if(req.body.channel_name != 'test'){
         res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!");
@@ -54,8 +54,8 @@ app.post('/', function (req, res) {
         }else{
             var args = req.body.text.split(' ');
             var raw_receiver = args[0].split('|')[0];
-            var receiver = getDisplayName(raw_receiver.substring(2, raw_receiver.length))
-            var giver = getDisplayName(req.body.user_id)
+            var receiver = await getDisplayName(raw_receiver.substring(2, raw_receiver.length));
+            var giver = await getDisplayName(req.body.user_id);
 
             console.log('raw receiver: ' + raw_receiver)
 
