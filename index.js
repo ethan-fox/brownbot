@@ -1,14 +1,19 @@
 
 const axios = require('axios')
 const express = require('express')
+const bodyParser = require('body-parser');
+
 var app = express()
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 function postToGeneral(body){
     // Make a POST request to general
     axios({
         method: 'post',
         url: 'https://hooks.slack.com/services/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', // <--- #test
-        //url: 'https://hooks.slack.com/services/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', <--- #general
+        //url: 'https://hooks.slack.com/services/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', // <--- #general
         data: body,
         headers: {
             'Content-Type': 'application/json'}
