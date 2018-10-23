@@ -55,15 +55,16 @@ app.post('/', async function (req, res) {
     if(req.body.channel_name != 'test'){
         res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!");
     }else{
-        if (req.body.text == ''){
-            res.send('Thanks for using brownbot!  Currently, the following commands are acceptable:\n `@user [message]` `leaderboard` `ping`')
+        if (req.body.text == '' || req.body.text == 'help'){
+            res.send('Thanks for using brownbot!  Currently, the following commands are acceptable:\n `@user [message]` `dance` `help` `ping` `stats`')
         }else if (req.body.text == 'ping'){
             res.send('Thanks for pinging brownbot! This is a test message.');
-        // }else if(res.body.text == 'dance'){
-        //     // TODO dancing poop gif
-        //     postMessage({
-        //         'text': 'For now, just imagine that there\'s a dancing poop emoji here.'});
-        }else if (req.body.text == 'leaderboard'){
+        }else if(res.body.text == 'dance'){
+            // TODO dancing poop gif
+            postMessage({
+                'text': 'For now, just imagine that there\'s a dancing poop emoji here.'});
+            res.send()
+        }else if (req.body.text == 'stats'){
 
             var board = []
 
@@ -97,6 +98,9 @@ app.post('/', async function (req, res) {
                     reason += (args[i] + ' ')
                 }
 
+                if(reason == ''){
+                    reason = 'No reason given :sad:'}
+
                 await scores.get(giver, function (err, body) {
                     if (typeof body == 'undefined') {
                         scores.insert({ 'poop_given': 1, 'poop_received': 0 }, giver);
@@ -116,8 +120,8 @@ app.post('/', async function (req, res) {
                 });
 
                 postMessage({
-                    'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason
-                });
+                    'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason });
+                res.send()
             }
         }
         //console.log(req.body.text)
