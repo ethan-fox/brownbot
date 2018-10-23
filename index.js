@@ -14,7 +14,7 @@ function postToGeneral(body){
     });
 }
 
-app.get('/', function (req, res) {
+app.post('/', function (req, res) {
     postToGeneral({
         'text': '123',
         'attachments': [{
@@ -25,7 +25,7 @@ app.get('/', function (req, res) {
     res.send('thanks')
 })
 
-app.get('/poop', function(req, res){
+app.post('/chocolate', function(req, res){
     postToGeneral({
         'text': '💩'})
     res.send('thanks for poop')
