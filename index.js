@@ -16,7 +16,12 @@ function postToGeneral(body){
 }
 
 app.get('/', function (req, res) {
-    res.send({ 'text': '123' })
+    res.send({ 'text': '123',
+               'attachments': [ {
+                   'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
+                   'title': 'spooky'
+                } ]
+            })
 })
 
 app.get('/poop', function(req, res){
