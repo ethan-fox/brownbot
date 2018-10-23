@@ -85,9 +85,26 @@ app.post('/', async function (req, res) {
             for(var i = 1; i < args.length; ++i){
                 reason += (args[i] + ' ')
             }
+
+            if(giver == receiver){
+                res.send('You can\'t give poop to yourself!');
+            }
             
-            var giver_stats = await scores.get(giver);
-            var receiver_stats = await scores.get(receiver);
+            await scores.get(giver, function(err, body){
+                if(typeof body == 'undefined'){
+                    scores.insert({ 'poop_given': 1, 'poop_received': 0 }, giver)
+                }else{
+                    console.log(body)
+                }
+            });
+
+            await scores.get(receiver, function(err, body){
+                if (typeof body == 'undefined') {
+                    scores.insert({ 'poop_given': 0, 'poop_received': 1 }, receiver)
+                }else{
+                    console.log(body)
+                }
+            });
 
             console.log('giver stats (bfore):' + giver_stats)
 
