@@ -25,6 +25,7 @@ app.get('/poop', function(req, res){
 
 app.get('/hello', function(){
     postToGeneral('💩   💩')
+    res.send('thx')
 })
 
 // TODO: app post something too?
