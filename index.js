@@ -62,7 +62,7 @@ app.post('/', async function (req, res) {
         }else if(req.body.text == 'dance'){
             postMessage({
                 'attachments': [ {
-                    'image_url': 'https://media1.tenor.com/images/5e6840a91967f74aef26a2fbd126cf8d/tenor.gif?itemid=10436106' } ] 
+                    'image_url': 'https://media.giphy.com/media/cSmwcTzp96ocU/giphy.gif' } ] 
                 });
             res.send()
         }else if (req.body.text == 'stats'){
@@ -100,7 +100,7 @@ app.post('/', async function (req, res) {
                 }
 
                 if(reason == ''){
-                    reason = 'No reason given :('}
+                    reason = 'No reason given.'}
 
                 await scores.get(giver, function (err, body) {
                     if (typeof body == 'undefined') {
