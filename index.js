@@ -87,6 +87,8 @@ app.post('/', async function (req, res) {
             }
 
             if(giver == receiver){
+                postMessage({
+                    'text': '<@' + giver + '> pooped themselves!'})
                 res.send('You can\'t give poop to yourself!');
             }
             
@@ -105,10 +107,6 @@ app.post('/', async function (req, res) {
                     console.log(body)
                 }
             });
-
-            console.log('giver stats (bfore):' + giver_stats)
-
-            console.log('receiver stats (bfore):' + receiver_stats)
             
             postMessage({
                 'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason});
