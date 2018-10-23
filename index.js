@@ -19,13 +19,19 @@ app.get('/', function (req, res) {
     res.send('zzzzz')
 })
 
-// app.get('/poop', function(req, res){
-//     res.send('💩')
-// })
+app.get('/poop', function(req, res){
+    res.send('💩')
+})
+
+app.get('/hello', function(){
+    postToGeneral('💩   💩')
+})
 
 // TODO: app post something too?
 
-var server = app.listen(8080, function () {
+var real_port = process.env.PORT || 8080;
+
+var server = app.listen(real_port, function () {
     var host = server.address().address
     var port = server.address().port
 
