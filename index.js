@@ -98,8 +98,14 @@ app.post('/', async function (req, res) {
                     return { 'poop_given': 0, 'poop_received': 0 }}
             });
 
-            console.log('giver stats (bfore) ' + giver_stats)
-            console.log('receiver stats (bfore) ' + receiver_stats)
+            console.log('giver stats (bfore):')
+            for(var prop in giver_stats){
+                console.log(prop + ": " + giver_stats[prop])
+            }
+            console.log('receiver stats (bfore):')
+            for (var prop in receiver_stats) {
+                console.log(prop + ": " + receiver_stats[prop])
+            }
             
             postMessage({
                 'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason});
