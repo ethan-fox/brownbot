@@ -7,7 +7,8 @@ function postToGeneral(body){
     // Make a POST request to general
     axios({
         method: 'post',
-        url: 'https://hooks.slack.com/services/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',
+        url: 'https://hooks.slack.com/services/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', // <--- #test
+        //url: 'https://hooks.slack.com/services/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', <--- #general
         data: body,
         headers: {
             'Content-Type': 'application/json'}
@@ -25,7 +26,7 @@ app.post('/', function (req, res) {
     res.send('thanks')
 })
 
-app.post('/chocolate', function(req, res){
+app.post('/brown', function(req, res){
     postToGeneral({
         'text': '💩'})
     res.send('thanks for poop')
