@@ -16,16 +16,16 @@ function postToGeneral(body){
 }
 
 app.get('/', function (req, res) {
-    res.send('zzzzz')
+    res.send({ 'text': '123' })
 })
 
 app.get('/poop', function(req, res){
-    res.send('💩')
+    res.send({ 'text': '💩' })
 })
 
 app.get('/hello', function(){
     postToGeneral('💩   💩')
-    res.send('thx')
+    res.send('youre welcome')
 })
 
 // TODO: app post something too?
