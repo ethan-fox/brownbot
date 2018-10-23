@@ -60,7 +60,6 @@ app.post('/', async function (req, res) {
         }else if (req.body.text == 'ping'){
             res.send('Thanks for pinging brownbot! This is a test message.');
         }else if(req.body.text == 'dance'){
-            console.log('FUCKING DANCE')
             postMessage({
                 'attachments': [ {
                     'title': 'What did you honestly expect?',
@@ -75,17 +74,17 @@ app.post('/', async function (req, res) {
                 await scores.list(function(err, body){
 
                     var users = body.rows;
-                    console.log(users)
                 
                     for(var i = 0; i < users.length; ++i){
-                        console.log(users[i])
                         board.push(users[i]);
                     }
 
                 });
             }catch(err){
-                console.log('ERROR: ' + err)
+                console.log(err)
             }
+
+            console.log(board)
 
             postMessage({
                 'text': board.toString()})
@@ -99,6 +98,7 @@ app.post('/', async function (req, res) {
             
 
             if(giver == receiver){
+                // TODO: poop mouth
                 postMessage({
                     'text': '<@' + giver + '> pooped themselves!'});
                 res.send('You can\'t give poop to yourself!');
@@ -112,23 +112,31 @@ app.post('/', async function (req, res) {
                 if(reason == ''){
                     reason = 'No reason given.'}
 
-                await scores.get(giver, function (err, body) {
-                    if (typeof body == 'undefined') {
-                        scores.insert({ 'poop_given': 1, 'poop_received': 0 }, giver);
-                    } else {
-                        body.poop_given++;
-                        scores.insert(body, giver);
-                    }
-                });
+                try{
+                    await scores.get(giver, function (err, body) {
+                        if (typeof body == 'undefined') {
+                            scores.insert({ 'poop_given': 1, 'poop_received': 0 }, giver);
+                        } else {
+                            body.poop_given++;
+                            scores.insert(body, giver);
+                        }
+                    });
+                }catch(err){
+                    console.log(err)
+                }
 
-                await scores.get(receiver, function (err, body) {
-                    if (typeof body == 'undefined') {
-                        scores.insert({ 'poop_given': 0, 'poop_received': 1 }, receiver)
-                    } else {
-                        body.poop_received++;
-                        scores.insert(body, receiver);
-                    }
-                });
+                try{
+                    await scores.get(receiver, function (err, body) {
+                        if (typeof body == 'undefined') {
+                            scores.insert({ 'poop_given': 0, 'poop_received': 1 }, receiver)
+                        } else {
+                            body.poop_received++;
+                            scores.insert(body, receiver);
+                        }
+                    });
+                }catch(err){
+                    console.log(err)
+                }
 
                 postMessage({
                     'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason });
