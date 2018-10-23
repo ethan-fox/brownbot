@@ -20,6 +20,28 @@ function postMessage(body){
     });
 }
 
+async function getDisplayName(raw_name){
+    var result = await axios({
+        method: 'post',
+        url: 'https://slack.com/api/users.info',
+        data: 'token=xoxb-425527920966-461615227600-HtDz46TBLLwOPRK5z3MutyxD&user='+raw_name
+    });
+
+    if(result.ok){
+        return result.user.profile.display_name
+    }else{
+        return 'ERROR: User not found!'
+    }
+}
+
+//user_list = new Map();
+
+// '<escaped name>' : {
+//     'real_name': '<real name>',
+//     'poop_given': '<number>',
+//     'poop_received': '<number>'
+// }
+
 app.post('/', function (req, res) {
     // TODO: Change channel name to 'general' when push to prod
     if(req.body.channel_name != 'test'){
@@ -27,12 +49,19 @@ app.post('/', function (req, res) {
     }else{
         if (req.body.text == 'ping') {
             postMessage({
-                'response_type': 'ephemeral',
                 'text': 'Thanks for pinging brownbot! This is a private test message.'
             });
         }else{
             var args = req.body.text.split(' ');
-            console.log(args)
+            var raw_receiver = args[0].split('|')[0];
+            var receiver = getDisplayName(raw_receiver.substring(2, raw_receiver.length))
+            var giver = getDisplayName(req.body.user_id)
+
+            console.log('raw receiver: ' + raw_receiver)
+
+            console.log('Giver: ' + giver)
+            console.log('Receiver: ' + receiver)
+
             postMessage({
                 'text': 'qqq'
                 // 'attachments': [{
@@ -44,7 +73,7 @@ app.post('/', function (req, res) {
         //console.log(req.body.text)
         res.send();
     }
-})
+});
 
 var real_port = process.env.PORT || 8080;
 
