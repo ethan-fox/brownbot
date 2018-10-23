@@ -84,7 +84,7 @@ app.post('/', async function (req, res) {
                         scores.insert({ 'poop_given': 1, 'poop_received': 0 }, giver);
                     } else {
                         body.poop_given++;
-                        scores.insert(bidy, giver);
+                        scores.insert(body, giver);
                     }
                 });
 
