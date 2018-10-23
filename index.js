@@ -76,10 +76,13 @@ app.post('/', async function (req, res) {
             postMessage({
                 'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason});
             
-            scores.index(function(err, result){
-                console.log(err);
-                console.log(result);
-            })
+            scores.list(function (err, body) {
+                console.log(err)
+                // body is an array
+                body.forEach(function (db) {
+                    console.log(db);
+                });
+            });
             
         }
         //console.log(req.body.text)
