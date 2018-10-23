@@ -21,16 +21,16 @@ function postMessage(body){
 }
 
 async function getDisplayName(raw_name){
+    console.log('raw name: ' + raw_name)
     var result = await axios({
         method: 'post',
-        url: `https://slack.com/api/users.info?
-        token=xoxb-425527920966-461615227600-HtDz46TBLLwOPRK5z3MutyxD&user=${raw_name}`
+        url: 'https://slack.com/api/users.info?token=xoxb-425527920966-461615227600-HtDz46TBLLwOPRK5z3MutyxD&user=' + raw_name
     });
-    
+
     if(result.ok){
         return result.user.profile.display_name
     }else{
-        return 'ERROR: User not found!'
+        return result.error
     }
 }
 
@@ -48,9 +48,7 @@ app.post('/', async function (req, res) {
         res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!");
     }else{
         if (req.body.text == 'ping') {
-            postMessage({
-                'text': 'Thanks for pinging brownbot! This is a private test message.'
-            });
+            res.send('Thanks for pinging brownbot! This is a test message.');
         }else{
             var args = req.body.text.split(' ');
             var raw_receiver = args[0].split('|')[0];
