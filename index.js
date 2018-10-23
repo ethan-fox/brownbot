@@ -55,12 +55,30 @@ app.post('/', async function (req, res) {
     if(req.body.channel_name != 'test'){
         res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!");
     }else{
-        if (req.body.text == 'ping'){
+        if (req.body.text == ''){
+            res.send('Thanks for using brownbot!  Currently, the following commands are acceptable:\n `@user [message]` `leaderboard` `ping`')
+        }else if (req.body.text == 'ping'){
             res.send('Thanks for pinging brownbot! This is a test message.');
         // }else if(res.body.text == 'dance'){
         //     // TODO dancing poop gif
         //     postMessage({
         //         'text': 'For now, just imagine that there\'s a dancing poop emoji here.'});
+        }else if (req.body.text == 'leaderboard'){
+
+            var board = []
+
+            await scores.list(function(err, body){
+                if(!err){
+                    body.rows.forEach(function(user){
+                        board.push(user);
+                    });
+                }else{
+                    console.log('ERROR: ' + err);
+                }
+            });
+
+            postMessage({
+                'text': board.toString()})
         }else{
             var args = req.body.text.split(' ');
             var raw_receiver = args[0].split('|')[0];
@@ -70,7 +88,7 @@ app.post('/', async function (req, res) {
 
             if(giver == receiver){
                 postMessage({
-                    'text': '<@' + giver + '> pooped themselves!'})
+                    'text': '<@' + giver + '> pooped themselves!'});
                 res.send('You can\'t give poop to yourself!');
             }else{
                 var reason = '';
