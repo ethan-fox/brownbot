@@ -19,9 +19,9 @@ app.get('/', function (req, res) {
     res.send('zzzzz')
 })
 
-app.get('/poop', function(req, res){
-    res.send('💩')
-})
+// app.get('/poop', function(req, res){
+//     res.send('💩')
+// })
 
 // TODO: app post something too?
 
