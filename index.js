@@ -49,10 +49,10 @@ app.post('/', async function (req, res) {
     }else{
         if (req.body.text == 'ping'){
             res.send('Thanks for pinging brownbot! This is a test message.');
-        }else if(res.body.text == 'dance'){
-            // TODO dancing poop gif
-            postMessage({
-                'text': 'For now, just imagine that there\'s a dancing poop emoji here.'})
+        // }else if(res.body.text == 'dance'){
+        //     // TODO dancing poop gif
+        //     postMessage({
+        //         'text': 'For now, just imagine that there\'s a dancing poop emoji here.'});
         }else{
             var args = req.body.text.split(' ');
             var raw_receiver = args[0].split('|')[0];
