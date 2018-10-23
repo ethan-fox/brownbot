@@ -37,7 +37,6 @@ async function getDisplayName(raw_name){
 //user_list = new Map();
 
 // '<escaped name>' : {
-//     'real_name': '<real name>',
 //     'poop_given': '<number>',
 //     'poop_received': '<number>'
 // }
@@ -56,12 +55,8 @@ app.post('/', async function (req, res) {
         }else{
             var args = req.body.text.split(' ');
             var raw_receiver = args[0].split('|')[0];
-            var receiver = await getDisplayName(raw_receiver.substring(2, raw_receiver.length));
-            var giver = await getDisplayName(req.body.user_id);
-
-            console.log('Giver: ' + giver)
-            console.log('Receiver: ' + receiver)
-
+            var receiver = raw_receiver.substring(2, raw_receiver.length);
+            var giver = req.body.user_id;
             var reason = '';
 
             for(var i = 1; i < args.length; ++i){
@@ -69,7 +64,7 @@ app.post('/', async function (req, res) {
             }
 
             postMessage({
-                'text': '@' + giver + ' has given a 💩 to @' + receiver + '! Reason: ' + reason
+                'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\nReason:' + reason
                 // 'attachments': [{
                 //     'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
                 //     'title': 'spooky'
