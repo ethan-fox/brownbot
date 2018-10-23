@@ -6,9 +6,22 @@ const Cloudant = require('@cloudant/cloudant');
 
 var app = express();
 
+var IAM = {
+  "apikey": "D40JvEBVS62OAMIeF4WEi1uW0vXJviWx4h3ayE17bbD5",
+  "host": "4e0f03ac-45f9-46ae-b211-c1b19438a4f4-bluemix.cloudant.com",
+  "iam_apikey_description": "Auto generated apikey during resource-key operation for Instance - crn:v1:bluemix:public:cloudantnosqldb:us-south:a/c49aeb28e28ce4ad4698bbe8a965bdaf:ff6ddf6e-f395-4093-b2ea-89971125668a::",
+  "iam_apikey_name": "auto-generated-apikey-d14c6a58-822c-4801-a7e6-dc55eb1545d8",
+  "iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+  "iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/c49aeb28e28ce4ad4698bbe8a965bdaf::serviceid:ServiceId-62a1f62d-4431-42c7-97f9-b510679c1d0e",
+  "password": "caa288fe74c197dee530bb833f33c70d4ab176735529fa333c12970a86893d3a",
+  "port": 443,
+  "url": "https://4e0f03ac-45f9-46ae-b211-c1b19438a4f4-bluemix:caa288fe74c197dee530bb833f33c70d4ab176735529fa333c12970a86893d3a@4e0f03ac-45f9-46ae-b211-c1b19438a4f4-bluemix.cloudant.com",
+  "username": "4e0f03ac-45f9-46ae-b211-c1b19438a4f4-bluemix"
+}
+
 var creds = {
-    'account': 'therternstonoecoughboake',
-    'password': '0ef605ab81c1a524a90f29bfca331446883882cc'
+    'account': IAM.username,
+    'password': IAM.password
 }
 
 var cloudant = new Cloudant(creds)
@@ -80,7 +93,7 @@ app.post('/', async function (req, res) {
                 console.log(err)
                 console.log(result)
             })
-
+            console.log('=======================')
             scores.get('yoyo', function (err, result) {
                 console.log(err)
                 console.log(result)
