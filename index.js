@@ -1,9 +1,19 @@
 
-const axios = require('axios')
-const express = require('express')
+const axios = require('axios');
+const express = require('express');
 const bodyParser = require('body-parser');
+const Cloudant = require('@cloudant/cloudant');
 
-var app = express()
+var app = express();
+
+var creds = {
+    'account': 'therternstonoecoughboake',
+    'password': '0ef605ab81c1a524a90f29bfca331446883882cc'
+}
+
+var cloudant = new Cloudant(creds)
+
+var scores = cloudant.db.use('brownbot-stats')
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -64,12 +74,14 @@ app.post('/', async function (req, res) {
             }
 
             postMessage({
-                'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\nReason:' + reason
-                // 'attachments': [{
-                //     'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
-                //     'title': 'spooky'
-                // }]
-            });
+                'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason});
+            
+            scores.index(function(err, result){
+                for (var i = 0; i < result.indexes.length; i++) {
+                    console.log('  %s (%s): %j', result.indexes[i].name, result.indexes[i].type, result.indexes[i].def);
+                }
+            })
+            
         }
         //console.log(req.body.text)
         res.send();
