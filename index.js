@@ -89,12 +89,13 @@ app.post('/', async function (req, res) {
             postMessage({
                 'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason});
             
-            scores.get('994b8d6b6e2d0a8ccbb100f37debf6b4', function(err, result){
+            await scores.get('994b8d6b6e2d0a8ccbb100f37debf6b4', function(err, result){
                 console.log(err)
+                console.log('+')
                 console.log(result)
             })
             console.log('=======================')
-            scores.get('yoyo', function (err, result) {
+            await scores.get('yoyo', function (err, result) {
                 console.log(err)
                 console.log(result)
             })
