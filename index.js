@@ -69,17 +69,17 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            var board = ['ayyy', 'yooo']
-
-            // await scores.list(function(err, body){
-            //     if(!err){
-            //         body.rows.forEach(function(user){
-            //             board.push(user);
-            //         });
-            //     }else{
-            //         console.log('ERROR: ' + err);
-            //     }
-            // });
+            var board = []
+            
+            await scores.list(function(err, body){
+                if(!err){
+                    body.rows.forEach(function(user){
+                        board.push(user);
+                    });
+                }else{
+                    console.log('ERROR: ' + err);
+                }
+            });
 
             postMessage({
                 'text': board.toString()})
