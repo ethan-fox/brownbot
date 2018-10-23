@@ -8,8 +8,8 @@ var app = express()
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+// Make a POST request to webhook
 function postMessage(body){
-    // Make a POST request to general
     axios({
         method: 'post',
         url: 'https://hooks.slack.com/services/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', // <--- #test
@@ -27,7 +27,6 @@ async function getDisplayName(raw_name){
         url: 'https://slack.com/api/users.info?token=xoxb-425527920966-461615227600-HtDz46TBLLwOPRK5z3MutyxD&user=' + raw_name
     });
 
-    console.log(result.data)
     if(result.data.ok){
         return result.data.user.profile.display_name
     }else{
@@ -44,24 +43,33 @@ async function getDisplayName(raw_name){
 // }
 
 app.post('/', async function (req, res) {
-    // TODO: Change channel name to 'general' when push to prod
+    // TODO Change channel name to 'general' when push to prod
     if(req.body.channel_name != 'test'){
         res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!");
     }else{
-        if (req.body.text == 'ping') {
+        if (req.body.text == 'ping'){
             res.send('Thanks for pinging brownbot! This is a test message.');
+        }else if(res.body.text == 'dance'){
+            // TODO dancing poop gif
+            postMessage({
+                'text': 'For now, just imagine that there\'s a dancing poop emoji here.'})
         }else{
             var args = req.body.text.split(' ');
             var raw_receiver = args[0].split('|')[0];
-
             var receiver = await getDisplayName(raw_receiver.substring(2, raw_receiver.length));
             var giver = await getDisplayName(req.body.user_id);
 
             console.log('Giver: ' + giver)
             console.log('Receiver: ' + receiver)
 
+            var reason = '';
+
+            for(var i = 1; i < args.length; ++i){
+                reason += (args[i] + ' ')
+            }
+
             postMessage({
-                'text': 'qqq'
+                'text': giver + ' has given a 💩 to ' + receiver + '! Reason: ' + reason
                 // 'attachments': [{
                 //     'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
                 //     'title': 'spooky'
