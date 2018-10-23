@@ -1,0 +1,15 @@
+{
+  "name": "brownbot",
+  "version": "1.0.0",
+  "description": "Slackbot/app for giving poop to each other",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Ethan Fox",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
