@@ -52,6 +52,7 @@ app.post('/', async function (req, res) {
         }else{
             var args = req.body.text.split(' ');
             var raw_receiver = args[0].split('|')[0];
+            console.log('scrubbed receiver: <' + raw_receiver.substring(2, raw_receiver.length) + '>')
             var receiver = await getDisplayName(raw_receiver.substring(2, raw_receiver.length));
             var giver = await getDisplayName(req.body.user_id);
 
