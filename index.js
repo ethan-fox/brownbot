@@ -60,8 +60,10 @@ app.post('/', async function (req, res) {
         }else if (req.body.text == 'ping'){
             res.send('Thanks for pinging brownbot! This is a test message.');
         }else if(req.body.text == 'dance'){
+            console.log('FUCKING DANCE')
             postMessage({
                 'attachments': [ {
+                    'title': 'What did you honestly expect?',
                     'image_url': 'https://media.giphy.com/media/cSmwcTzp96ocU/giphy.gif' } ] 
                 });
             res.send()
