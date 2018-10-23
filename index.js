@@ -35,14 +35,7 @@ app.post('/', function (req, res) {
         })
     }
     console.log(req.body.text)
-    res.send('thanks')
-})
-
-app.post('/brown', function(req, res){
-    postToGeneral({
-        'text': '💩other poop'
-    })
-    res.send('thanks for poop')
+    res.send()
 })
 
 // TODO: app post something too?
