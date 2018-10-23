@@ -8,29 +8,27 @@ function postToGeneral(body){
     axios({
         method: 'post',
         url: 'https://hooks.slack.com/services/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',
-        data: {
-            'text': body},
+        data: body,
         headers: {
             'Content-Type': 'application/json'}
     });
 }
 
 app.get('/', function (req, res) {
-    res.send({ 'text': '123',
-               'attachments': [ {
-                   'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
-                   'title': 'spooky'
-                } ]
-            })
+    postToGeneral({
+        'text': '123',
+        'attachments': [{
+            'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
+            'title': 'spooky'
+        }]
+    })
+    res.send('thanks')
 })
 
 app.get('/poop', function(req, res){
-    res.send({ 'text': '💩' })
-})
-
-app.get('/hello', function(){
-    postToGeneral('💩   💩')
-    res.send({ 'text': 'youre welcome' })
+    postToGeneral({
+        'text': '💩'})
+    res.send('thanks for poop')
 })
 
 // TODO: app post something too?
