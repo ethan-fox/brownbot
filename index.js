@@ -59,7 +59,7 @@ app.post('/', async function (req, res) {
             res.send('Thanks for using brownbot!  Currently, the following commands are acceptable:\n `@user [message]` `dance` `help` `ping` `stats`')
         }else if (req.body.text == 'ping'){
             res.send('Thanks for pinging brownbot! This is a test message.');
-        }else if(res.body.text == 'dance'){
+        }else if(req.body.text == 'dance'){
             // TODO dancing poop gif
             postMessage({
                 'text': 'For now, just imagine that there\'s a dancing poop emoji here.'});
