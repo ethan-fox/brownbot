@@ -21,21 +21,26 @@ function postToGeneral(body){
 }
 
 app.post('/', function (req, res) {
-    if(req.body.text == ''){
-        postToGeneral({
-        'text': 'Thanks for pinging brownbot! This is a test message.',
-        // 'attachments': [{
-        //     'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
-        //     'title': 'spooky'
-        // }]
-        })
-    }else if(req.body.text == 'give'){
-        postToGeneral({
-            'text': '💩'
-        })
+    // TODO: Change channel name to 'general' when push to prod
+    if(req.body.channel_name != 'test'){
+        res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!")
+    }else{
+        if (req.body.text == '') {
+            postToGeneral({
+                'text': 'Thanks for pinging brownbot! This is a test message.',
+                // 'attachments': [{
+                //     'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
+                //     'title': 'spooky'
+                // }]
+            })
+        } else if (req.body.text == 'give') {
+            postToGeneral({
+                'text': '💩'
+            })
+        }
+        //console.log(req.body.text)
+        res.send()
     }
-    console.log(req.body.text)
-    res.send()
 })
 
 // TODO: app post something too?
