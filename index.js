@@ -60,9 +60,10 @@ app.post('/', async function (req, res) {
         }else if (req.body.text == 'ping'){
             res.send('Thanks for pinging brownbot! This is a test message.');
         }else if(req.body.text == 'dance'){
-            // TODO dancing poop gif
             postMessage({
-                'text': 'For now, just imagine that there\'s a dancing poop emoji here.'});
+                'attachments': [ {
+                    'image_url': 'https://media1.tenor.com/images/5e6840a91967f74aef26a2fbd126cf8d/tenor.gif?itemid=10436106' } ] 
+                });
             res.send()
         }else if (req.body.text == 'stats'){
 
