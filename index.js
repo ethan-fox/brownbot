@@ -67,17 +67,17 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            var board = []
+            var board = ['ayyy', 'yooo']
 
-            await scores.list(function(err, body){
-                if(!err){
-                    body.rows.forEach(function(user){
-                        board.push(user);
-                    });
-                }else{
-                    console.log('ERROR: ' + err);
-                }
-            });
+            // await scores.list(function(err, body){
+            //     if(!err){
+            //         body.rows.forEach(function(user){
+            //             board.push(user);
+            //         });
+            //     }else{
+            //         console.log('ERROR: ' + err);
+            //     }
+            // });
 
             postMessage({
                 'text': board.toString()})
@@ -100,7 +100,7 @@ app.post('/', async function (req, res) {
                 }
 
                 if(reason == ''){
-                    reason = 'No reason given :sad:'}
+                    reason = 'No reason given :('}
 
                 await scores.get(giver, function (err, body) {
                     if (typeof body == 'undefined') {
