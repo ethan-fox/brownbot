@@ -70,12 +70,10 @@ app.post('/', async function (req, res) {
         }else if (req.body.text == 'stats'){
 
             var board = []
-            
+
             await scores.list(function(err, body){
                 if(!err){
-                    body.rows.forEach(function(user){
-                        board.push(user);
-                    });
+                    console.log(body)
                 }else{
                     console.log('ERROR: ' + err);
                 }
