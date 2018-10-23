@@ -77,9 +77,7 @@ app.post('/', async function (req, res) {
                 'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason});
             
             scores.index(function(err, result){
-                for (var i = 0; i < result.indexes.length; i++) {
-                    console.log('  %s (%s): %j', result.indexes[i].name, result.indexes[i].type, result.indexes[i].def);
-                }
+                console.log(result);
             })
             
         }
