@@ -69,7 +69,7 @@ app.post('/', async function (req, res) {
             }
 
             postMessage({
-                'text': giver + ' has given a 💩 to ' + receiver + '! Reason: ' + reason
+                'text': '@' + giver + ' has given a 💩 to @' + receiver + '! Reason: ' + reason
                 // 'attachments': [{
                 //     'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
                 //     'title': 'spooky'
