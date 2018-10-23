@@ -27,6 +27,8 @@ async function getDisplayName(raw_name){
         url: 'https://slack.com/api/users.info?token=xoxb-425527920966-461615227600-HtDz46TBLLwOPRK5z3MutyxD&user=' + raw_name
     });
 
+    console.log(result)
+
     if(result.ok){
         return result.user.profile.display_name
     }else{
