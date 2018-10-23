@@ -86,26 +86,12 @@ app.post('/', async function (req, res) {
                 reason += (args[i] + ' ')
             }
             
-            var giver_stats = await scores.get(giver, function(err, result){
-                // If user not on system yet
-                if(err){
-                    return { 'poop_given': 0, 'poop_received': 0 }}
-            });
+            var giver_stats = await scores.get(giver);
+            var receiver_stats = await scores.get(receiver);
 
-            var receiver_stats = await scores.get(receiver, function (err, result) {
-                // If user not on system yet
-                if (err) {
-                    return { 'poop_given': 0, 'poop_received': 0 }}
-            });
+            console.log('giver stats (bfore):' + giver_stats)
 
-            console.log('giver stats (bfore):')
-            for(var prop in giver_stats){
-                console.log(prop + ": " + giver_stats[prop])
-            }
-            console.log('receiver stats (bfore):')
-            for (var prop in receiver_stats) {
-                console.log(prop + ": " + receiver_stats[prop])
-            }
+            console.log('receiver stats (bfore):' + receiver_stats)
             
             postMessage({
                 'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason});
