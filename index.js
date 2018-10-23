@@ -43,20 +43,6 @@ function postMessage(body){
     });
 }
 
-async function getDisplayName(raw_name){
-
-    var result = await axios({
-        method: 'post',
-        url: 'https://slack.com/api/users.info?token=xoxb-425527920966-461615227600-HtDz46TBLLwOPRK5z3MutyxD&user=' + raw_name
-    });
-
-    if(result.data.ok){
-        return result.data.user.profile.display_name
-    }else{
-        return result.data.error
-    }
-}
-
 //user_list = new Map();
 
 // '<escaped name>' : {
@@ -80,36 +66,41 @@ app.post('/', async function (req, res) {
             var raw_receiver = args[0].split('|')[0];
             var receiver = raw_receiver.substring(2, raw_receiver.length);
             var giver = req.body.user_id;
-            var reason = '';
-
-            for(var i = 1; i < args.length; ++i){
-                reason += (args[i] + ' ')
-            }
+            
 
             if(giver == receiver){
                 postMessage({
                     'text': '<@' + giver + '> pooped themselves!'})
                 res.send('You can\'t give poop to yourself!');
-            }
-            
-            await scores.get(giver, function(err, body){
-                if(typeof body == 'undefined'){
-                    scores.insert({ 'poop_given': 1, 'poop_received': 0 }, giver)
-                }else{
-                    console.log(body)
-                }
-            });
+            }else{
+                var reason = '';
 
-            await scores.get(receiver, function(err, body){
-                if (typeof body == 'undefined') {
-                    scores.insert({ 'poop_given': 0, 'poop_received': 1 }, receiver)
-                }else{
-                    console.log(body)
+                for (var i = 1; i < args.length; ++i) {
+                    reason += (args[i] + ' ')
                 }
-            });
-            
-            postMessage({
-                'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason});
+
+                await scores.get(giver, function (err, body) {
+                    if (typeof body == 'undefined') {
+                        scores.insert({ 'poop_given': 1, 'poop_received': 0 }, giver);
+                    } else {
+                        body.poop_given++;
+                        scores.insert(bidy, giver);
+                    }
+                });
+
+                await scores.get(receiver, function (err, body) {
+                    if (typeof body == 'undefined') {
+                        scores.insert({ 'poop_given': 0, 'poop_received': 1 }, receiver)
+                    } else {
+                        body.poop_received++;
+                        scores.insert(body, receiver);
+                    }
+                });
+
+                postMessage({
+                    'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason
+                });
+            }
         }
         //console.log(req.body.text)
         res.send();
