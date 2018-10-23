@@ -23,10 +23,10 @@ function postMessage(body){
 async function getDisplayName(raw_name){
     var result = await axios({
         method: 'post',
-        url: 'https://slack.com/api/users.info',
-        data: 'token=xoxb-425527920966-461615227600-HtDz46TBLLwOPRK5z3MutyxD&user='+raw_name
+        url: `https://slack.com/api/users.info?
+        token=xoxb-425527920966-461615227600-HtDz46TBLLwOPRK5z3MutyxD&user=${raw_name}`
     });
-
+    
     if(result.ok){
         return result.user.profile.display_name
     }else{
