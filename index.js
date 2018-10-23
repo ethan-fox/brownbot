@@ -69,18 +69,24 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            var board = []
+            var board = ['statistics']
 
-            await scores.list(function(err, body){
-                if(!err){
-                    console.log(body)
-                }else{
-                    console.log('ERROR: ' + err);
-                }
-            });
+            try{
+                await scores.list(function(err, body){
+                    if(!err){
+                        console.log(body)
+                    }else{
+                        console.log('ERROR: ' + err);
+                    }
+                });
+            }catch(err){
+                console.log(err)
+            }
 
             postMessage({
                 'text': board.toString()})
+
+            res.send('stats go here')
         }else{
             var args = req.body.text.split(' ');
             var raw_receiver = args[0].split('|')[0];
