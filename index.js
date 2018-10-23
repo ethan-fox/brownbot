@@ -21,20 +21,27 @@ function postToGeneral(body){
 }
 
 app.post('/', function (req, res) {
-    postToGeneral({
-        'text': '123',
-        'attachments': [{
-            'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
-            'title': 'spooky'
-        }]
-    })
-    console.log(req.body)
+    if(req.body.text == ''){
+        postToGeneral({
+        'text': 'Thanks for pinging brownbot! This is a test message.',
+        // 'attachments': [{
+        //     'image_url': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaF0K6Deki58UtsUJfeCn-2nwwMMxXi2Do9KA0msXWp-nLUDvnww',
+        //     'title': 'spooky'
+        // }]
+        })
+    }else if(req.body.text == 'give'){
+        postToGeneral({
+            'text': '💩'
+        })
+    }
+    console.log(req.body.text)
     res.send('thanks')
 })
 
 app.post('/brown', function(req, res){
     postToGeneral({
-        'text': '💩'})
+        'text': '💩other poop'
+    })
     res.send('thanks for poop')
 })
 
