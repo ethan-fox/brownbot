@@ -25,9 +25,7 @@ function postMessage(body){
         method: 'post',
         url: 'https://hooks.slack.com/services/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', // <--- #test
         //url: 'https://hooks.slack.com/services/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', // <--- #general
-        data: body,
-        headers: {
-            'Content-Type': 'application/json'}
+        data: body
     });
 }
 
@@ -96,7 +94,7 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            scores.list({ include_docs: true }, async function (err, body) {
+            await scores.list({ include_docs: true }, async function (err, body) {
 
                 var board = [['Name', 'Shits Given', 'Shits Recieved', 'Difference']]
                 table_config = {
@@ -126,12 +124,12 @@ app.post('/', async function (req, res) {
                     board.push([await getDisplayName(temp._id), temp.poop_given, temp.poop_received, temp.poop_diff])
                 }
 
-                board.sort(function (y, x) {
+                board.sort(function (x, y) {
                     for (var i = 2; i < 4; ++i) {
-                        if (x[i] < y[i]) {
+                        if (x[i] > y[i]) {
                             return -1;
                         }
-                        if (x[i] > y[i]) {
+                        if (x[i] < y[i]) {
                             return 1;
                         }
                     }
@@ -150,7 +148,10 @@ app.post('/', async function (req, res) {
             var receiver = raw_receiver.substring(2, raw_receiver.length);
             var giver = req.body.user_id;
 
-            res.send(giveKudos(giver, receiver, args.slice(1,args.length)));
+            res.send(giveKudos(giver, receiver, args.slice(1,args.length).catch(function(body){
+                console.log(body)
+                })
+            ));
         }
         res.send('How did you get here?? This is a bug, please let Ethan know about it');
     }
