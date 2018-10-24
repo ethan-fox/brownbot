@@ -162,8 +162,6 @@ app.post('/', async function (req, res) {
         }
         res.send('How did you get here?? This is a bug, please let Ethan know about it');
     }
-}).catch(function () {
-    console.log("Promise Rejected");
 });
 
 var real_port = process.env.PORT || 8080;
