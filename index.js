@@ -7,21 +7,9 @@ const {table} = require('table');
 
 var app = express();
 
-var IAM ={ "apikey": "Q6ThqJYYw1xtmrLCtfV7S3A-WOPBQkxrkzuJ3z2Obb-o",
-        "host": "4e0f03ac-45f9-46ae-b211-c1b19438a4f4-bluemix.cloudant.com",
-        "iam_apikey_description": "Auto generated apikey during resource-key operation for Instance - crn:v1:bluemix:public:cloudantnosqldb:us-south:a/c49aeb28e28ce4ad4698bbe8a965bdaf:ff6ddf6e-f395-4093-b2ea-89971125668a::",
-        "iam_apikey_name": "auto-generated-apikey-e63c78a6-34d3-4321-b841-a291b3b76a98",
-        "iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Manager",
-        "iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/c49aeb28e28ce4ad4698bbe8a965bdaf::serviceid:ServiceId-62a1f62d-4431-42c7-97f9-b510679c1d0e",
-        "password": "caa288fe74c197dee530bb833f33c70d4ab176735529fa333c12970a86893d3a",
-        "port": 443,
-        "url": "https://4e0f03ac-45f9-46ae-b211-c1b19438a4f4-bluemix:caa288fe74c197dee530bb833f33c70d4ab176735529fa333c12970a86893d3a@4e0f03ac-45f9-46ae-b211-c1b19438a4f4-bluemix.cloudant.com",
-        "username": "4e0f03ac-45f9-46ae-b211-c1b19438a4f4-bluemix"
-    }
-
 var creds = {
-    'account': IAM.username,
-    'password': IAM.password
+    'account': process.env.IAM_USER,
+    'password': process.env.IAM_PW
 }
 
 var cloudant = new Cloudant(creds)
@@ -44,60 +32,8 @@ function postMessage(body){
 }
 
 async function getDisplayName(raw_name){
-    const response = await axios.get('https://slack.com/api/users.info?token=xoxp-425527920966-424575050611-462489320466-804d2943803d73a99544bf2427ac6335&user=' + raw_name);
+    const response = await axios.get('https://slack.com/api/users.info?token=' + process.env.SLACK_TOKEN + '&user=' + raw_name);
     return response.data.user.profile.display_name;
-}
-
-async function postStats(){
-
-    scores.list({ include_docs: true }, async function (err, body) {
-
-        var board = [['Name', '💩 Given', '💩 Recieved', '💩 Difference']]
-        table_config = {
-            columns: {
-                0: {
-                    alignment: 'left',
-                    minWidth: 10
-                },
-                1: {
-                    alignment: 'right',
-                    minWidth: 10
-                },
-                2: {
-                    alignment: 'right',
-                    minWidth: 10
-                },
-                3: {
-                    alignment: 'right',
-                    minWidth: 10
-                }
-            }
-        };
-
-        for (var i = 0; i < body.rows.length; ++i) {
-            temp = body.rows[i].doc;
-            temp.poop_diff = temp.poop_received - temp.poop_given;
-            board.push([await getDisplayName(temp._id), temp.poop_given, temp.poop_received, temp.poop_diff])
-        }
-
-        board.sort(function (y, x) {
-            for(var i = 2; i < 4; ++i){
-                if (x[i] < y[i]) {
-                    return -1;
-                }
-                if (x[i] > y[i]) {
-                    return 1;
-                }
-            }
-            return 0;
-        });
-
-        
-        var output = await table(board, table_config);
-        return output;
-        
-    });
-
 }
 
 function giveKudos(giver, receiver, args){
@@ -107,13 +43,11 @@ function giveKudos(giver, receiver, args){
         postMessage({
             'text': '<@' + giver + '> pooped themselves!'
         });
-        res.send('You can\'t give poop to yourself!');
-    } else {
-        var reason = '';
 
-        for (var i = 1; i < args.length; ++i) {
-            reason += (args[i] + ' ')
-        }
+        return 'You can\'t give poop to yourself!'
+
+    } else {
+        var reason = args.join(' ')
 
         if (reason == '') {
             reason = 'No reason given.'
@@ -140,7 +74,7 @@ function giveKudos(giver, receiver, args){
         postMessage({
             'text': '<@' + giver + '> has given a 💩 to <@' + receiver + '>!\n*Reason:* ' + reason
         });
-        res.send()
+        return
     }
 }
 
@@ -162,8 +96,52 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            postStats().then(function(data){
-                res.send('```'+data+'```');
+            scores.list({ include_docs: true }, async function (err, body) {
+
+                var board = [['Name', 'Shits Given', 'Shits Recieved', 'Difference']]
+                table_config = {
+                    columns: {
+                        0: {
+                            alignment: 'left',
+                            minWidth: 10
+                        },
+                        1: {
+                            alignment: 'right',
+                            minWidth: 10
+                        },
+                        2: {
+                            alignment: 'right',
+                            minWidth: 10
+                        },
+                        3: {
+                            alignment: 'right',
+                            minWidth: 10
+                        }
+                    }
+                };
+
+                for (var i = 0; i < body.rows.length; ++i) {
+                    temp = body.rows[i].doc;
+                    temp.poop_diff = temp.poop_received - temp.poop_given;
+                    board.push([await getDisplayName(temp._id), temp.poop_given, temp.poop_received, temp.poop_diff])
+                }
+
+                board.sort(function (y, x) {
+                    for (var i = 2; i < 4; ++i) {
+                        if (x[i] < y[i]) {
+                            return -1;
+                        }
+                        if (x[i] > y[i]) {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                });
+
+                var output = await table(board, table_config);
+
+                res.send('```' + output + '```');
+
             });
 
         }else{
@@ -172,8 +150,7 @@ app.post('/', async function (req, res) {
             var receiver = raw_receiver.substring(2, raw_receiver.length);
             var giver = req.body.user_id;
 
-            giveKudos(giver, receiver, args);
-            res.send()
+            res.send(giveKudos(giver, receiver, args.slice(1,args.length)));
         }
         res.send('How did you get here?? This is a bug, please let Ethan know about it');
     }
