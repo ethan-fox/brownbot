@@ -29,9 +29,10 @@ function postMessage(body){
     });
 }
 
-async function getDisplayName(raw_name){
+async function getUserProfile(raw_name){
     const response = await axios.get('https://slack.com/api/users.info?token=' + process.env.SLACK_TOKEN + '&user=' + raw_name);
-    return response.data.user.profile.display_name;
+    console.log(response.data)
+    return response.data
 }
 
 function giveKudos(giver, receiver, args){
@@ -121,9 +122,9 @@ app.post('/', async function (req, res) {
                 for (var i = 0; i < body.rows.length; ++i) {
                     temp = body.rows[i].doc;
                     temp.poop_diff = temp.poop_received - temp.poop_given;
-                    board.push([await getDisplayName(temp._id).catch(function () {
+                    board.push([await getUserProfile(temp._id).catch(function () {
                         console.log("Promise Rejected");
-                    }), temp.poop_given, temp.poop_received, temp.poop_diff])
+                    }).user.profile.display_name, temp.poop_given, temp.poop_received, temp.poop_diff])
                 }
 
                 board.sort(function (x, y) {
@@ -154,7 +155,18 @@ app.post('/', async function (req, res) {
             var receiver = raw_receiver.substring(2, raw_receiver.length);
             var giver = req.body.user_id;
 
-            res.send({'text': giveKudos(giver, receiver, args.slice(1,args.length))});
+            if(!(await getUserProfile(receiver)).ok){
+                res.send({'text': 'User does not exist, stop trying to break my bot!'})
+            }
+
+            var return_val = giveKudos(giver, receiver, args.slice(1, args.length))
+
+            if(return_val){
+                res.send({ 'text': return_val });
+            }else{
+                res.send()
+            }
+            
         }
         res.send({'text':'How did you get here?? This is a bug, please let Ethan know about it'});
     }
