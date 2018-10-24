@@ -12,6 +12,7 @@
   "dependencies": {
     "@cloudant/cloudant": "^2.4.0",
     "axios": "^0.18.0",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "table": "^5.1.0"
   }
 }
