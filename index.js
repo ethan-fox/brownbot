@@ -19,8 +19,6 @@ var scores = cloudant.db.use('brownbot-stats')
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-console.log()
-
 // Make a POST request to webhook
 function postMessage(body){
     axios({
@@ -96,15 +94,15 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            scores.get(req.body.user_id, function (data) {
-                if(data){
+            scores.get(req.body.user_id, function (err, data) {
+                if (data) {
                     var out_str = '*Shits Given:* ' + data.poop_given + ' *Shits Received:* ' + data.poop_received + ' *Difference:* ' + (data.poop_received - data.poop_given)
                     res.send({ 'text': out_str })
-                }else{
-                    res.send({ 'text': 'You haven\'t given or received a 💩 yet!'})
+                } else {
+                    res.send({ 'text': 'You haven\'t given or received a 💩 yet!' })
                 }
-                
-            })
+
+            });
 
             // TODO: figure this tf out
             // await scores.list({ include_docs: true }, async function (err, body) {
