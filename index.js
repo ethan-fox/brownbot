@@ -82,9 +82,9 @@ app.post('/', async function (req, res) {
         res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!");
     }else{
         if (req.body.text == '' || req.body.text == 'help'){
-            res.send('Thanks for using brownbot!  Currently, the following commands are acceptable:\n `@user [message]` `dance` `help` `ping` `stats`')
+            res.send({'text': 'Thanks for using brownbot!  The following commands are acceptable:\n `@user [message]` `dance` `help` `ping` `stats`'})
         }else if (req.body.text == 'ping'){
-            res.send('Thanks for pinging brownbot! This is a test message.');
+            res.send({'text':'Thanks for pinging brownbot! This is a test message.'});
         }else if(req.body.text == 'dance'){
             postMessage({
                 'attachments': [ {
@@ -142,7 +142,7 @@ app.post('/', async function (req, res) {
                     console.log("Promise Rejected");
                 });
 
-                res.send('```' + output + '```');
+                res.send({'text': '```' + output + '```'});
 
             }).catch(function () {
                 console.log("Promise Rejected");
@@ -154,13 +154,9 @@ app.post('/', async function (req, res) {
             var receiver = raw_receiver.substring(2, raw_receiver.length);
             var giver = req.body.user_id;
 
-            res.send(giveKudos(giver, receiver, args.slice(1,args.length)
-                ).catch(function () {
-                    console.log("Promise Rejected");
-                })
-            );
+            res.send({'text': giveKudos(giver, receiver, args.slice(1,args.length))});
         }
-        res.send('How did you get here?? This is a bug, please let Ethan know about it');
+        res.send({'text':'How did you get here?? This is a bug, please let Ethan know about it'});
     }
 });
 
