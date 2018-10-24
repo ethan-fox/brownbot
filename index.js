@@ -148,7 +148,7 @@ function giveKudos(giver, receiver, args){
 
 app.post('/', async function (req, res) {
     // TODO Change channel name to 'general' when push to prod
-    if(req.body.channel_name != 'test'){
+    if(req.body.channel_name != 'general'){
         res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!");
     }else{
         if (req.body.text == '' || req.body.text == 'help'){
