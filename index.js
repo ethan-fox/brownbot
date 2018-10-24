@@ -95,8 +95,7 @@ function postStats(){
 
         var output = table(board, table_config)
 
-        postMessage({
-            'text': '```' + output + '```'});
+        req.send('```' + output + '```');
         
     });
 
