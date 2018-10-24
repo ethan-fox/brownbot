@@ -95,7 +95,8 @@ function postStats(){
 
         var output = table(board, table_config)
 
-        req.send('```' + output + '```');
+        postMessage({'text': '```' + output + '```',
+                     'response_type':'ephemeral'});
         
     });
 
