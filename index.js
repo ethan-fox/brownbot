@@ -121,7 +121,9 @@ app.post('/', async function (req, res) {
                 for (var i = 0; i < body.rows.length; ++i) {
                     temp = body.rows[i].doc;
                     temp.poop_diff = temp.poop_received - temp.poop_given;
-                    board.push([await getDisplayName(temp._id), temp.poop_given, temp.poop_received, temp.poop_diff])
+                    board.push([await getDisplayName(temp._id).catch(function () {
+                        console.log("Promise Rejected");
+                    }), temp.poop_given, temp.poop_received, temp.poop_diff])
                 }
 
                 board.sort(function (x, y) {
@@ -136,10 +138,14 @@ app.post('/', async function (req, res) {
                     return 0;
                 });
 
-                var output = await table(board, table_config);
+                var output = await table(board, table_config).catch(function () {
+                    console.log("Promise Rejected");
+                });
 
                 res.send('```' + output + '```');
 
+            }).catch(function () {
+                console.log("Promise Rejected");
             });
 
         }else{
@@ -148,13 +154,16 @@ app.post('/', async function (req, res) {
             var receiver = raw_receiver.substring(2, raw_receiver.length);
             var giver = req.body.user_id;
 
-            res.send(giveKudos(giver, receiver, args.slice(1,args.length).catch(function(body){
-                console.log(body)
+            res.send(giveKudos(giver, receiver, args.slice(1,args.length)
+                ).catch(function () {
+                    console.log("Promise Rejected");
                 })
-            ));
+            );
         }
         res.send('How did you get here?? This is a bug, please let Ethan know about it');
     }
+}).catch(function () {
+    console.log("Promise Rejected");
 });
 
 var real_port = process.env.PORT || 8080;
