@@ -96,8 +96,14 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            scores.get(req.body.user_id, function(data){
-                res.send({'text': '*Shits Given:* ' + data.poop_given + ' *Shits Received:* ' + data.poop_received + ' *Difference:* ' + (data.poop_received-data.poop_given)})
+            scores.get(req.body.user_id, function (data) {
+                if(data){
+                    var out_str = '*Shits Given:* ' + data.poop_given + ' *Shits Received:* ' + data.poop_received + ' *Difference:* ' + (data.poop_received - data.poop_given)
+                    res.send({ 'text': out_str })
+                }else{
+                    res.send({ 'text': 'You haven\'t given or received a 💩 yet!'})
+                }
+                
             })
 
             // TODO: figure this tf out
