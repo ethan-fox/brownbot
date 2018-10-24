@@ -157,18 +157,17 @@ app.post('/', async function (req, res) {
 
             if(!(await getUserProfile(receiver)).ok){
                 res.send({'text': 'User does not exist, stop trying to break my bot!'})
-            }
-
-            var return_val = giveKudos(giver, receiver, args.slice(1, args.length))
-
-            if(return_val){
-                res.send({ 'text': return_val });
             }else{
-                res.send()
+                var return_val = giveKudos(giver, receiver, args.slice(1, args.length))
+
+                if (return_val) {
+                    res.send({ 'text': return_val });
+                } else {
+                    res.send()
+                }
             }
-            
         }
-        res.send({'text':'How did you get here?? This is a bug, please let Ethan know about it'});
+        //res.send({'text':'How did you get here?? This is a bug, please let Ethan know about it'});
     }
 });
 
