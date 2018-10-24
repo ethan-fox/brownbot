@@ -93,10 +93,7 @@ function postStats(){
         });
 
 
-        var output = table(board, table_config)
-
-        postMessage({'text': '```' + output + '```',
-                     'response_type':'ephemeral'});
+        return table(board, table_config);
         
     });
 
@@ -164,8 +161,7 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            postStats();
-            res.send()
+            res.send('```' + postStats() + '```')
 
         }else{
             var args = req.body.text.split(' ');
