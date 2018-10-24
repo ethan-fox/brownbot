@@ -35,8 +35,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 function postMessage(body){
     axios({
         method: 'post',
-        //url: 'https://hooks.slack.com/services/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', // <--- #test
-        url: 'https://hooks.slack.com/services/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', // <--- #general
+        url: 'https://hooks.slack.com/services/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', // <--- #test
+        //url: 'https://hooks.slack.com/services/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', // <--- #general
         data: body,
         headers: {
             'Content-Type': 'application/json'}
@@ -147,7 +147,7 @@ function giveKudos(giver, receiver, args){
 
 app.post('/', async function (req, res) {
     // TODO Change channel name to 'general' when push to prod
-    if(req.body.channel_name != 'general'){
+    if(req.body.channel_name != 'test'){
         res.send("Sorry! It looks like I can't operate in this conversation. Blame Ethan!");
     }else{
         if (req.body.text == '' || req.body.text == 'help'){
