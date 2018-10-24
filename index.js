@@ -3,7 +3,7 @@ const axios = require('axios');
 const express = require('express');
 const bodyParser = require('body-parser');
 const Cloudant = require('@cloudant/cloudant');
-const {table} = require('table');
+//const {table} = require('table');
 
 var app = express();
 
@@ -19,6 +19,8 @@ var scores = cloudant.db.use('brownbot-stats')
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+console.log()
+
 // Make a POST request to webhook
 function postMessage(body){
     axios({
@@ -31,7 +33,6 @@ function postMessage(body){
 
 async function getUserProfile(raw_name){
     const response = await axios.get('https://slack.com/api/users.info?token=' + process.env.SLACK_TOKEN + '&user=' + raw_name);
-    console.log(response.data)
     return response.data
 }
 
@@ -95,59 +96,64 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            await scores.list({ include_docs: true }, async function (err, body) {
+            await scores.get(req.body.user_id, function(body){
+                res.send({'text': '*Shits Given:* ' + body.poop_given + ' *Shits Received:* ' + body.poop_received + ' *Difference:* ' + (body.poop_received-body.poop_given)})
+            })
 
-                var board = [['Name', 'Shits Given', 'Shits Recieved', 'Difference']]
-                table_config = {
-                    columns: {
-                        0: {
-                            alignment: 'left',
-                            minWidth: 10
-                        },
-                        1: {
-                            alignment: 'right',
-                            minWidth: 10
-                        },
-                        2: {
-                            alignment: 'right',
-                            minWidth: 10
-                        },
-                        3: {
-                            alignment: 'right',
-                            minWidth: 10
-                        }
-                    }
-                };
+            // TODO: figure this tf out
+            // await scores.list({ include_docs: true }, async function (err, body) {
 
-                for (var i = 0; i < body.rows.length; ++i) {
-                    temp = body.rows[i].doc;
-                    temp.poop_diff = temp.poop_received - temp.poop_given;
-                    board.push([await getUserProfile(temp._id).catch(function () {
-                        console.log("Promise Rejected");
-                    }).user.profile.display_name, temp.poop_given, temp.poop_received, temp.poop_diff])
-                }
+            //     var board = [['Name', 'Shits Given', 'Shits Recieved', 'Difference']]
+            //     table_config = {
+            //         columns: {
+            //             0: {
+            //                 alignment: 'left',
+            //                 minWidth: 10
+            //             },
+            //             1: {
+            //                 alignment: 'right',
+            //                 minWidth: 10
+            //             },
+            //             2: {
+            //                 alignment: 'right',
+            //                 minWidth: 10
+            //             },
+            //             3: {
+            //                 alignment: 'right',
+            //                 minWidth: 10
+            //             }
+            //         }
+            //     };
 
-                board.sort(function (x, y) {
-                    for (var i = 2; i < 4; ++i) {
-                        if (x[i] > y[i]) {
-                            return -1;
-                        }
-                        if (x[i] < y[i]) {
-                            return 1;
-                        }
-                    }
-                    return 0;
-                });
+            //     for (var i = 0; i < body.rows.length; ++i) {
+            //         temp = body.rows[i].doc;
+            //         temp.poop_diff = temp.poop_received - temp.poop_given;
+            //         board.push([await getUserProfile(temp._id).catch(function () {
+            //             console.log("Promise Rejected");
+            //         }).user.profile.display_name, temp.poop_given, temp.poop_received, temp.poop_diff])
+            //     }
 
-                var output = await table(board, table_config).catch(function () {
-                    console.log("Promise Rejected");
-                });
+            //     board.sort(function (x, y) {
+            //         for (var i = 2; i < 4; ++i) {
+            //             if (x[i] > y[i]) {
+            //                 return -1;
+            //             }
+            //             if (x[i] < y[i]) {
+            //                 return 1;
+            //             }
+            //         }
+            //         return 0;
+            //     });
 
-                res.send({'text': '```' + output + '```'});
+            //     var output = await table(board, table_config).catch(function () {
+            //         console.log("Promise Rejected");
+            //     });
 
-            }).catch(function () {
-                console.log("Promise Rejected");
-            });
+            //     res.send({'text': '```' + output + '```'});
+
+            // }).catch(function () {
+            //     console.log("Promise Rejected");
+            // });
 
         }else{
             var args = req.body.text.split(' ');
