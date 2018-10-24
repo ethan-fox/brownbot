@@ -48,7 +48,7 @@ async function getDisplayName(raw_name){
     return response.data.user.profile.display_name;
 }
 
-function postStats(){
+async function postStats(){
 
     scores.list({ include_docs: true }, async function (err, body) {
 
@@ -92,8 +92,9 @@ function postStats(){
             return 0;
         });
 
-
-        return table(board, table_config);
+        
+        var output = await table(board, table_config);
+        return output;
         
     });
 
@@ -161,7 +162,7 @@ app.post('/', async function (req, res) {
             res.send()
         }else if (req.body.text == 'stats'){
 
-            res.send('```' + postStats() + '```')
+            res.send('```' + await postStats() + '```')
 
         }else{
             var args = req.body.text.split(' ');
