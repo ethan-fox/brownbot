@@ -104,7 +104,7 @@ app.post('/', async function (req, res) {
 
             });
 
-            // TODO: figure this tf out
+            // TODO: figure this out
             // await scores.list({ include_docs: true }, async function (err, body) {
 
             //     var board = [['Name', 'Shits Given', 'Shits Recieved', 'Difference']]
